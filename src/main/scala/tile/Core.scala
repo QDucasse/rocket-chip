@@ -25,6 +25,7 @@ trait CoreParams {
   val useBitManip: Boolean = false
   val useVector: Boolean = false
   val useSCIE: Boolean
+  val useRIMI: Boolean
   val useRVE: Boolean
   val mulDiv: Option[MulDivParams]
   val fpu: Option[FPUParams]
