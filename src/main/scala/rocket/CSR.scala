@@ -460,6 +460,9 @@ class CSRFile(
   val reg_bp = Reg(Vec(1 << log2Up(nBreakpoints), new BP))
   val reg_pmp = Reg(Vec(nPMPs, new PMPReg))
 
+  // RIMI: Register definition
+  val reg_dmpcfg = Reg(UInt(width=xLen))
+
   val reg_mie = Reg(UInt(width = xLen))
   val (reg_mideleg, read_mideleg) = {
     val reg = Reg(UInt(xLen.W))
@@ -787,6 +790,11 @@ class CSRFile(
     read_mapping += CSRs.vsatp -> reg_vsatp.asUInt
     read_mapping += CSRs.vsepc -> read_vsepc
     read_mapping += CSRs.vstvec -> read_vstvec
+  }
+
+  // RIMI: Read value (TODO: Slice it like the PMP)
+  if (usingRIMI) {
+    read_mapping += CSRs.dmpcfg -> reg_dmpcfg
   }
 
   // mimpid, marchid, and mvendorid are 0 unless overridden by customCSRs
@@ -1296,6 +1304,11 @@ class CSRFile(
       when (decoded_addr(CSRs.mideleg))  { reg_mideleg := wdata }
       when (decoded_addr(CSRs.medeleg))  { reg_medeleg := wdata }
       when (decoded_addr(CSRs.scounteren)) { reg_scounteren := wdata }
+    }
+
+    // RIMI: Write values
+    if (usingRIMI) {
+      when (decoded_addr(CSRs.dmpcfg)) { reg_dmpcfg := wdata }
     }
 
     if (usingHypervisor) {
