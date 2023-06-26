@@ -25,7 +25,7 @@ trait CoreParams {
   val useBitManip: Boolean = false
   val useVector: Boolean = false
   val useSCIE: Boolean
-  val useRIMI: Boolean
+  val useRIMI: Boolean  // RIMI: core parameter (set in config)
   val useRVE: Boolean
   val mulDiv: Option[MulDivParams]
   val fpu: Option[FPUParams]
@@ -82,6 +82,7 @@ trait HasCoreParameters extends HasTileParameters {
   val usingBitManip = coreParams.useBitManip
   val usingVector = coreParams.useVector
   val usingSCIE = coreParams.useSCIE
+  val usingRIMI = coreParams.useRIMI  // RIMI: propagate rimi info
   val usingNMI = coreParams.useNMI
 
   val retireWidth = coreParams.retireWidth

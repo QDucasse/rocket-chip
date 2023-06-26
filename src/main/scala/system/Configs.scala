@@ -38,6 +38,10 @@ class DualChannelDualBankConfig extends Config(
 
 class RoccExampleConfig extends Config(new WithRoccExample ++ new DefaultConfig)
 
+
+// RIMI: Default config with RIMI flag up
+class RIMIConfig extends Config(new WithRIMI ++ new DefaultConfig)
+
 class HeterogeneousTileExampleConfig extends Config(
   new WithNBigCores(n = 1) ++
   new WithNMedCores(n = 1) ++

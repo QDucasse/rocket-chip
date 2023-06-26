@@ -301,6 +301,14 @@ class WithRoccExample extends Config((site, here, up) => {
     })
 })
 
+
+class WithRIMI extends Config((site, here, up) => {
+  case RocketTilesKey => up(RocketTilesKey, site) map { r =>
+    r.copy(core = r.core.copy(useRIMI = true))
+  }
+})
+
+
 class WithDefaultBtb extends Config((site, here, up) => {
   case RocketTilesKey => up(RocketTilesKey, site) map { r =>
     r.copy(btb = Some(BTBParams()))
