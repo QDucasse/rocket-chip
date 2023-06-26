@@ -462,6 +462,7 @@ class CSRFile(
 
   // RIMI: Register definition
   val reg_dmpcfg = Reg(UInt(width=xLen))
+  val reg_curdom = Reg(UInt(width=3))
 
   val reg_mie = Reg(UInt(width = xLen))
   val (reg_mideleg, read_mideleg) = {
@@ -795,6 +796,7 @@ class CSRFile(
   // RIMI: Read value (TODO: Slice it like the PMP)
   if (usingRIMI) {
     read_mapping += CSRs.dmpcfg -> reg_dmpcfg
+    read_mapping += CSRs.curdom -> reg_curdom
   }
 
   // mimpid, marchid, and mvendorid are 0 unless overridden by customCSRs
@@ -1309,6 +1311,7 @@ class CSRFile(
     // RIMI: Write values
     if (usingRIMI) {
       when (decoded_addr(CSRs.dmpcfg)) { reg_dmpcfg := wdata }
+      when (decoded_addr(CSRs.curdom)) { reg_curdom := wdata }
     }
 
     if (usingHypervisor) {
