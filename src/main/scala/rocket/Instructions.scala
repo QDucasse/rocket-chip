@@ -1071,7 +1071,7 @@ object CSRs {
   val pmpaddr62 = 0x3ee
   val pmpaddr63 = 0x3ef
   val dmpcfg = 0x3f0    // RIMI: dmpcfg encoding
-  val curdom = 0x400    // RIMI: curdom encoding
+  val curdom = 0x3f1    // RIMI: curdom encoding
   val mseccfg = 0x747
   val tselect = 0x7a0
   val tdata1 = 0x7a1
