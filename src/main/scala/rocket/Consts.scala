@@ -46,6 +46,12 @@ trait ScalarOpConstants {
   def DW_32 = false.B
   def DW_64 = true.B
   def DW_XPR = DW_64
+
+  // RIMI: Domains
+  def DOM0 = 0.U(2.W)
+  def DOM1 = 1.U(2.W)
+  def DOM2 = 2.U(2.W)
+  def DOMI = 3.U(2.W)
 }
 
 trait MemoryOpConstants {

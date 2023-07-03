@@ -299,6 +299,8 @@ class Rocket(tile: RocketTile)(implicit p: Parameters) extends CoreModule()(p)
   val id_csr = Mux(id_system_insn && id_ctrl.mem, CSR.N, Mux(id_csr_ren, CSR.R, id_ctrl.csr))
   val id_csr_flush = id_system_insn || (id_csr_en && !id_csr_ren && csr.io.decode(0).write_flush)
 
+  val id_dom_en = id_ctrl.code_dom === csr.io.curdom || id_ctrl.code_dom === DOMI
+
   val id_scie_decoder = if (!rocketParams.useSCIE) Wire(new SCIEDecoderInterface) else {
     val d = Module(new SCIEDecoder)
     assert(!io.imem.resp.valid || PopCount(d.io.unpipelined :: d.io.pipelined :: d.io.multicycle :: Nil) <= 1)
@@ -828,10 +830,12 @@ class Rocket(tile: RocketTile)(implicit p: Parameters) extends CoreModule()(p)
     csr.io.csr_stall ||
     id_reg_pause ||
     io.traceStall
-
-  // TODO: Add stalling mechanism here
   
-  ctrl_killd := !ibuf.io.inst(0).valid || ibuf.io.inst(0).bits.replay || take_pc_mem_wb || ctrl_stalld || csr.io.interrupt
+  ctrl_killd := !ibuf.io.inst(0).valid || ibuf.io.inst(0).bits.replay || 
+                take_pc_mem_wb || ctrl_stalld || csr.io.interrupt 
+                // !id_dom_en   // RIMI: Check code domain correct 
+
+  // Add code domain check here
 
   io.imem.req.valid := take_pc
   io.imem.req.bits.speculative := !take_pc_wb

@@ -287,6 +287,11 @@ class CSRFileIO(implicit p: Parameters) extends CoreBundle
   val mcontext = Output(UInt(coreParams.mcontextWidth.W))
   val scontext = Output(UInt(coreParams.scontextWidth.W))
 
+  // RIMI: io for current domain
+  val datdom = UInt(INPUT, 3)
+  val curdom = UInt(OUTPUT, 3)
+  val dom_chg = Bool(INPUT)
+
   val vector = usingVector.option(new Bundle {
     val vconfig = new VConfig().asOutput
     val vstart = UInt(maxVLMax.log2.W).asOutput
@@ -591,6 +596,8 @@ class CSRFile(
   io.mcontext := reg_mcontext.getOrElse(0.U)
   io.scontext := reg_scontext.getOrElse(0.U)
   io.pmp := reg_pmp.map(PMP(_))
+  io.curdom := reg_curdom                             // RIMI: Propagate the curdom value to the output
+  reg_curdom := Mux(io.dom_chg, io.datdom, io.curdom) // RIMI: Change domain if needed
 
   val isaMaskString =
     (if (usingMulDiv) "M" else "") +
