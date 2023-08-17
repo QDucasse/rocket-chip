@@ -1,6 +1,8 @@
 // See LICENSE.SiFive for license details.
 // See LICENSE.Berkeley for license details.
 
+// RIMI: DMP is used here to check correct domain
+
 package freechips.rocketchip.rocket
 
 import Chisel._
@@ -249,6 +251,8 @@ class TLB(instruction: Boolean, lgMaxSize: Int, cfg: TLBConfig)(implicit edge: T
   val prot_aa = fastCheck(_.supportsArithmetic)
   val prot_x = fastCheck(_.executable) && !deny_access_to_debug && pmp.io.x
   val prot_eff = fastCheck(Seq(RegionType.PUT_EFFECTS, RegionType.GET_EFFECTS) contains _.regionType)
+
+  // TODO: Add DMP mechanism here
 
   val sector_hits = sectored_entries(memIdx).map(_.sectorHit(vpn, priv_v))
   val superpage_hits = superpage_entries.map(_.hit(vpn, priv_v))
